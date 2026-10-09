@@ -1,6 +1,11 @@
-Write your reflection here.
-
-See reflection.md for what makes a good reflection — be specific, use the
-terminology from this assignment (lineage, grain, element function, Series.apply,
-row apply / axis=1, left merge, NaN, coerce, copy-add-return, boolean index,
-export), and make it actionable.
+Splitting the element function (parse_hours, clean_currency) from the 
+step that applies it
+(Series.apply in a copy-add-return shape) let me test one messy value
+ at a time while the original column kept its lineage. 
+ A left merge solved the grain mismatch without losing anyone’s hours, 
+ and unmatched IDs became NaN, so the row apply (axis=1) functions had 
+ to check pd.isna first. My one real bug was a copy-paste NameError 
+ (timesheet instead of employees), so next time I’ll recheck parameter 
+ names after copying a function. In the app, boolean index counts and a 
+ new-frame export kept the logic in the package,
+ and the tests caught a wrong metric label.

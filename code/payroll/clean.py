@@ -19,7 +19,7 @@ give you less.
 """
 
 import pandas as pd
-
+import math
 
 def parse_hours(value) -> float:
     """Read a weekly-hours string the way a shift lead typed it; return a float.
@@ -49,7 +49,31 @@ def parse_hours(value) -> float:
       of an hour, not 45 hours, and `test_parse_hours` will tell you.
     """
     # TODO: your code here
-    pass
+    if not isinstance(value, str):
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return 0.0  # unconvertible or None/missing
+        return 0.0 if pd.isna(number) else number  # check for NaN
+
+    text = value.strip().lower()
+    if not text:
+        return 0.0
+    if "h" not in text and "m" not in text:
+        try:
+            return float(text)
+        except ValueError:
+            return 0.0
+    hours = 0.0
+    try:
+        for word in text.split():
+            if word.endswith("h"):
+                hours += float(word[:-1])
+            elif word.endswith("m"):
+                hours += float(word[:-1]) / 60
+    except ValueError:
+        return 0.0
+    return hours
 
 
 def clean_currency(value) -> float:
@@ -73,7 +97,22 @@ def clean_currency(value) -> float:
       is not an accident — cleaning currency is something every pipeline does.
     """
     # TODO: your code here
-    pass
+    if not isinstance(value, str):
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return 0.0  # None, pd.NA, or something unconvertible
+        return number if math.isfinite(number) else 0.0  # catches NaN/inf
+
+    text = value.replace("$", "").replace(",", "").strip()
+    if not text:
+        return 0.0
+
+    try:
+        number = float(text)
+    except ValueError:
+        return 0.0  # unreadable format
+    return number if math.isfinite(number) else 0.0
 
 
 def add_hours_worked(timesheet: pd.DataFrame) -> pd.DataFrame:
@@ -92,7 +131,9 @@ def add_hours_worked(timesheet: pd.DataFrame) -> pd.DataFrame:
       shape: copy, add a column, return.
     """
     # TODO: your code here
-    pass
+    out = timesheet.copy()                              # never touch the caller's frame
+    out["hours_worked"] = out["hours"].apply(parse_hours)   # NEW column, old one untouched
+    return out
 
 
 def add_hourly_rate(employees: pd.DataFrame) -> pd.DataFrame:
@@ -105,7 +146,9 @@ def add_hourly_rate(employees: pd.DataFrame) -> pd.DataFrame:
     function and the other column names.
     """
     # TODO: your code here
-    pass
+    out = employees.copy()                                             # never touch the caller's frame
+    out["hourly_rate_usd"] = out["hourly_rate"].apply(clean_currency)  # NEW column, old one untouched
+    return out
 
 
 if __name__ == "__main__":

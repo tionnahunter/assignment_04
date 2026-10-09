@@ -34,7 +34,7 @@ def calc_gross_pay(hours: float, rate: float) -> float:
         calc_gross_pay(0.75, 17.0)   ->  12.75
         calc_gross_pay(20.0, float("nan"))  ->  0.0
     """
-    # TODO: your code here
+    
     if pd.isna(rate):
         return 0.0
     regular_hours = min(hours, OVERTIME_THRESHOLD)
@@ -53,7 +53,7 @@ def classify_pay(hours: float, rate: float) -> str:
     Check for unmatched *first*: an unknown employee with 45 hours is still
     unmatched, not overtime.
     """
-    # TODO: your code here
+    
     if pd.isna(rate):              # check unmatched FIRST
         return "unmatched"
     if hours > OVERTIME_THRESHOLD:
@@ -69,7 +69,7 @@ def add_gross_pay(payroll: pd.DataFrame) -> pd.DataFrame:
 
         lambda row: calc_gross_pay(row["hours_worked"], row["hourly_rate_usd"])
     """
-    # TODO: your code here
+    
     out = payroll.copy()
     out["gross_pay"] = out.apply(
         lambda row: calc_gross_pay(row["hours_worked"], row["hourly_rate_usd"]),
@@ -80,7 +80,7 @@ def add_gross_pay(payroll: pd.DataFrame) -> pd.DataFrame:
 
 def add_pay_type(payroll: pd.DataFrame) -> pd.DataFrame:
     """Return a copy with one new column, `pay_type`: `classify_pay` for every row."""
-    # TODO: your code here
+    
     out = payroll.copy()
     out["pay_type"] = out.apply(
         lambda row: classify_pay(row["hours_worked"], row["hourly_rate_usd"]),
@@ -97,7 +97,7 @@ def build_payroll(timesheet: pd.DataFrame, employees: pd.DataFrame) -> pd.DataFr
     pipeline computes (`hours_worked`, `hourly_rate_usd`, `gross_pay`, `pay_type`)
     and the roster's columns — one row per timesheet row.
     """
-    # TODO: your code here
+   
     timesheet = add_hours_worked(timesheet)      # Step 1: clean both
     employees = add_hourly_rate(employees)
     merged = merge_employees(timesheet, employees)   # Step 2
@@ -121,7 +121,7 @@ def payroll_export(payroll: pd.DataFrame) -> pd.DataFrame:
     pipeline's columns. The pipeline table keeps its lineage; the export is a
     view of it shaped for someone else's system.
     """
-    # TODO: your code here
+   
     payable = payroll[payroll["pay_type"] != "unmatched"]
     return pd.DataFrame({
         "payrolldate": payable["payroll_date"],

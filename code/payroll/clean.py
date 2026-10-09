@@ -48,7 +48,7 @@ def parse_hours(value) -> float:
     - The mistake people make: forgetting the `/ 60`. `"45m"` is three quarters
       of an hour, not 45 hours, and `test_parse_hours` will tell you.
     """
-    # TODO: your code here
+    
     if not isinstance(value, str):
         try:
             number = float(value)
@@ -96,7 +96,7 @@ def clean_currency(value) -> float:
     - You wrote this function in Assignment 02. It is the same function. That
       is not an accident — cleaning currency is something every pipeline does.
     """
-    # TODO: your code here
+    
     if not isinstance(value, str):
         try:
             number = float(value)
@@ -130,7 +130,7 @@ def add_hours_worked(timesheet: pd.DataFrame) -> pd.DataFrame:
     - `return out`. Three lines. Every pipeline step in this assignment has this
       shape: copy, add a column, return.
     """
-    # TODO: your code here
+    
     out = timesheet.copy()                              # never touch the caller's frame
     out["hours_worked"] = out["hours"].apply(parse_hours)   # NEW column, old one untouched
     return out
@@ -145,7 +145,7 @@ def add_hourly_rate(employees: pd.DataFrame) -> pd.DataFrame:
     How to build it: the same three lines as `add_hours_worked`, with the other
     function and the other column names.
     """
-    # TODO: your code here
+    
     out = employees.copy()                                             # never touch the caller's frame
     out["hourly_rate_usd"] = out["hourly_rate"].apply(clean_currency)  # NEW column, old one untouched
     return out
